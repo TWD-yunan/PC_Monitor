@@ -71,49 +71,55 @@ class MyWindow(QWidget):
         self.series.attachAxis(self.data_axisX)
         self.series.attachAxis(self.value_axisY)
         self.ui.graphicsView.setChart(self.chart)
-
+        # 获取cpu分级缓存(暂无法获取L1缓存)
         self.ui.cpu_L2_cache_value.setText(str(self.c.Win32_Processor()[0].L2CacheSize / 1024)+' MB')
         self.ui.cpu_L3_cache_value.setText(str(self.c.Win32_Processor()[0].L3CacheSize / 1024)+' MB')
-        # print("系统名称: "+self.c.Win32_OperatingSystem()[0].Caption)
 
         cpufreq = psutil.cpu_freq()
+        # 获取cpu内核数
         self.ui.cpu_kernel_value.setText(str(psutil.cpu_count(logical=False)))
+        # 获取cpu逻辑处理器数量
         self.ui.cpu_logicprocessor_value.setText(str(psutil.cpu_count(logical=True)))
+        # 获取cpu基准速度
         self.ui.cpu_basespeed_value.setText(str('%.2f'% (cpufreq.current/1000))+' GHz')
+        # 获取cpu名称
         self.ui.cpu_name.setText(str(self.c.Win32_Processor()[0].Name))
 
-
+    # 定时
     def set_timer(self):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.cpuLoad)
-        self.timer.start(1000)  # 每隔200毫秒出一个点
+        self.timer.start(1000)  # 每隔1000毫秒出一个点
 
     def cpuLoad(self):
         current_time = QDateTime.currentDateTime()
         self.data_axisX.setMin(current_time.addSecs(-self.limitminute*60))
         self.data_axisX.setMax(current_time.addSecs(0))
+
         cpuload = psutil.cpu_percent()
         self.series.append(current_time.toMSecsSinceEpoch(),cpuload)
+
         if self.series.at(0):
+            # 图表更新
             # Returns the datetime as the number of milliseconds that have passed since 1970-01-01T00:00:00.000,Coordinated Universal Time(UTC)
             if self.series.at(0).x()<current_time.addSecs(-self.limitminute*60).toMSecsSinceEpoch():
                 self.series.remove(0)
+        # 获取cpu利用率
         self.ui.cpu_percent_value.setText(str(cpuload)+'%')
+        # 获取正常运行时间(无效)
         self.ui.cpu_runningtime_value.setText(str(datetime.datetime.fromtimestamp(psutil.boot_time()).strftime("%d:%H:%M:%S")))
+        # 获取进程数
         self.ui.cpu_process_value.setText(str(len(psutil.pids())))
-
+        # 获取线程数
         self.ui.cpu_thread_value.setText(str(get_total_thread_count_pywin32()))
-
+        #获取句柄数
         self.ui.cpu_handle_value.setText(str(get_total_handle_count()))
-
-
 
 
 
 
 if  __name__ == '__main__':
     app = QApplication(sys.argv)
-
     window = MyWindow()
     window.show()
     sys.exit(app.exec())
