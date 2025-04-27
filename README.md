@@ -1,6 +1,6 @@
 # 语言 | Language
 
- 			[中文](#中文) \| [English](#english) 
+​		 [中文](#中文) \|  [English](#english) 
 
 
 
@@ -55,10 +55,10 @@
 
 目标图(Win11任务管理器)：
 
-![image-20250427173734088](C:\Users\yunan\AppData\Roaming\Typora\typora-user-images\image-20250427173734088.png)
+![img.png](img.png)![image-20250427173734088](C:\Users\yunan\AppData\Roaming\Typora\typora-user-images\image-20250427173734088.png)
 
 实际图：
-
+![img_1.png](img_1.png)
 ![image-20250427173824906](C:\Users\yunan\AppData\Roaming\Typora\typora-user-images\image-20250427173824906.png)
 
 2. 内存：
